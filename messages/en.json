@@ -1,0 +1,476 @@
+{
+  "meta": {
+    "title": "Soltani Fedi — Full Stack .NET Developer",
+    "description": "A .NET engineer specialising in multi-tenant SaaS architecture. Isolation, concurrency, API contracts, observability."
+  },
+  "nav": {
+    "manifesto": "Manifesto",
+    "expertise": "Expertise",
+    "concurrency": "Concurrency",
+    "experience": "Experience",
+    "work": "Work",
+    "contact": "Contact",
+    "toggleTheme": "Switch theme",
+    "toggleLocale": "Français",
+    "skipToContent": "Skip to content",
+    "rbac": "Access",
+    "notes": "Notes",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "label": "01 / Software engineer",
+    "name": "Soltani Fedi",
+    "role": "Full Stack .NET Developer",
+    "specialty": "Multi-tenant SaaS architecture",
+    "intro": "I build the invisible layer of SaaS platforms — the one nobody notices, until it's missing.",
+    "location": "Tunis, Tunisia",
+    "available": "Open to opportunities",
+    "scroll": "Scroll"
+  },
+  "manifesto": {
+    "label": "02 / Approach",
+    "statement": "No query ever crosses a tenant boundary.",
+    "highlight": "ever crosses",
+    "body": "EF Core Global Query Filters and per-tenant JWT claims, enforced across every module. Isolation is not a check bolted onto each call: it is carried by the data access layer itself.",
+    "diagram": {
+      "tenantA": "Tenant A",
+      "tenantB": "Tenant B",
+      "tenantC": "Tenant C",
+      "boundary": "Global Query Filter",
+      "blocked": "Query stopped at the boundary",
+      "alt": "Diagram: three isolated tenants. A query originating in tenant B is stopped at the boundary and never reaches tenant C's data."
+    },
+    "figures": {
+      "years": {
+        "value": "3+",
+        "label": "years of experience"
+      },
+      "handlers": {
+        "value": "100+",
+        "label": "CQRS handlers migrated"
+      },
+      "versions": {
+        "value": ".NET 5→10",
+        "label": "versions shipped"
+      },
+      "companies": {
+        "value": "6",
+        "label": "companies"
+      }
+    }
+  },
+  "expertise": {
+    "label": "03 / Expertise",
+    "title": "Four grounds",
+    "pillars": {
+      "isolation": {
+        "index": "I",
+        "title": "Multi-tenant isolation",
+        "body": "EF Core Global Query Filters, per-tenant JWT claims, entity-level RBAC across Admin, Manager and Collaborator. No data crosses a tenant boundary.",
+        "tags": "EF Core · JWT · RBAC"
+      },
+      "concurrency": {
+        "index": "II",
+        "title": "Security and integrity",
+        "body": "Atomic refresh token rotation with reuse detection, session revocation, PostgreSQL optimistic concurrency via xmin with HTTP 409 conflicts, real-time editing presence over SignalR.",
+        "tags": "JWT · xmin · SignalR"
+      },
+      "architecture": {
+        "index": "III",
+        "title": "Architecture and contracts",
+        "body": "Clean Architecture, CQRS, a custom OSS dispatcher replacing 100+ handlers, Application Services, *Request contracts and a refetch-GET pattern.",
+        "tags": "Clean Architecture · CQRS"
+      },
+      "delivery": {
+        "index": "IV",
+        "title": "Quality and delivery",
+        "body": "Serilog with multi-tenant correlation, PostgreSQL integration tests under Testcontainers, GitHub Actions quality gates, Docker deployment on Azure App Service.",
+        "tags": "Serilog · Testcontainers · Docker"
+      }
+    },
+    "highlight": "grounds",
+    "readCase": "Read the case study"
+  },
+  "concurrency": {
+    "label": "05 / Concurrency",
+    "title": "The conflict you never see",
+    "intro": "Two users edit the same record. Without optimistic concurrency, the second silently overwrites the first and nobody finds out. Try it.",
+    "userA": "User A",
+    "userB": "User B",
+    "field": "Project name",
+    "save": "Save",
+    "reset": "Reset",
+    "presence": "is editing this field right now",
+    "success": "200 OK — saved",
+    "conflictTitle": "409 Conflict",
+    "conflictBody": "The row changed since you read it. Reload before retrying.",
+    "expected": "expected xmin",
+    "actual": "actual xmin",
+    "explain": "PostgreSQL exposes a system version counter, xmin, incremented on every write. EF Core compares it before committing: if the value moved, the transaction is rejected rather than overwriting. The presence banner arrives over SignalR and warns before the collision even happens.",
+    "highlight": "never see"
+  },
+  "experience": {
+    "label": "06 / Experience",
+    "title": "Six roles, three years",
+    "present": "Present",
+    "stackLabel": "Stack",
+    "items": {
+      "teamxtend": {
+        "role": "Full Stack .NET Developer",
+        "company": "TeamXtend",
+        "kind": "Permanent · Tunis",
+        "period": "May 2026 — Present",
+        "project": "Time & Performance — multi-tenant SaaS platform for time tracking and performance management",
+        "p1": "Identified a licensing compliance risk with MediatR and AutoMapper (dual-licensed since 2025) and led the migration to a custom OSS dispatcher and Application Services: 100+ CQRS handlers replaced, 9 mapping profiles moved to Mapperly, and a Read/Write Repository separation with the Specification pattern across 5 domain aggregates.",
+        "p2": "Hardened the JWT lifecycle: atomic one-time refresh token rotation via compare-and-swap with reuse detection, revocation of every session on detected replay and on password change, and hot revalidation of Identity roles with token invalidation.",
+        "p3": "Implemented end-to-end optimistic concurrency: PostgreSQL xmin as the EF Core token with conflicts surfaced as HTTP 409, the token echoed from Angular detail screens and edit modals, and real-time Editing Presence over SignalR to warn before a collision happens.",
+        "p4": "Built the multi-tenant data isolation layer (EF Core Global Query Filters, per-tenant JWT claims) and hardened multi-role RBAC: entity-level permissions and navigation flags (canNavigate / canManage) exposed by the API and enforced front and back.",
+        "p5": "Standardised inbound API contracts (*Request) and lightweight mutation DTOs, with a refetch-GET pattern to reduce over-fetching; a contract audit across 4 modules delivered 11+ fixes, complemented on the frontend by lazy-loaded dropdowns and RxJS caching.",
+        "p6": "Centralised application logging with Serilog on the ASP.NET Core host (.NET 10): structured JSON logs, multi-tenant enrichment (TenantId, UserId, CorrelationId, X-Correlation-ID) and configuration-driven setup via appsettings.",
+        "p7": "Strengthened test coverage across the stack: PostgreSQL integration tests under Testcontainers (409 conflicts, tenant isolation), unit tests for API controllers, Application and Infrastructure layers (xUnit, Moq, FluentAssertions) and Angular (Karma/Jasmine), wired into GitHub Actions quality gates.",
+        "p8": "Delivered and operated the multi-tenant SaaS API packaged as a Docker container on Azure App Service via Azure Container Registry (Dev and Staging environments).",
+        "stack": ".NET 10 · Angular 18 · PostgreSQL · JWT · SignalR · Serilog · Testcontainers · Docker · Azure"
+      },
+      "itec": {
+        "role": "Full Stack .NET Developer",
+        "company": "ITEC",
+        "kind": "Freelance · Tunis",
+        "period": "January — April 2026",
+        "project": "AutoCAD plugin for hydraulic structures and a licensing platform",
+        "p1": "Built a .NET 8 AutoCAD plugin automating culvert and technical sheet creation from an alignment and a surface, including geometric and hydraulic calculations and 3D model generation.",
+        "p2": "Integrated the plugin with HY-8 (FHWA) software via automated export of calculated data, to verify hydraulic results.",
+        "p3": "Built a custom licensing platform: hardware identification, a REST verification API and a heartbeat mechanism blocking access if the licence becomes invalid.",
+        "stack": ".NET 8 · AutoCAD .NET API · Razor Pages · Dapper · SQL Server"
+      },
+      "mmm": {
+        "role": "Full Stack .NET Developer",
+        "company": "Maghreb Medical Maintenance",
+        "kind": "Freelance · Tunis",
+        "period": "June — November 2025",
+        "project": "GSL-MMM — ERP for delivery and customer management",
+        "p1": "Developed the invoice discharge management module, improving financial tracking of deliveries.",
+        "p2": "Built the inter-warehouse delivery module (planning, tracking and traceability of stock transfers between sites) and a customer return template, alongside targeted bug fixes across customer management workflows.",
+        "stack": ".NET 5 · Entity Framework · SQL Server · jQuery"
+      },
+      "access": {
+        "role": "Full Stack .NET Core Developer",
+        "company": "Access International",
+        "kind": "Consultant, Quebec Ministry of Transport",
+        "period": "August 2024 — June 2025",
+        "project": "APVHN — permit management for oversized convoys",
+        "p1": "Designed the application architecture of a government-grade permit management system and developed the core business modules: expertise, vehicles, permit generation.",
+        "p2": "Managed user authentication and access controls, and integrated external services to automate data exchanges.",
+        "p3": "Led the progressive migration from .NET 6 to .NET 8 across the whole solution and implemented xUnit unit tests on the core modules.",
+        "p4": "Built Studio 44, a Pilates studio management app: classes, subscriptions, registrations, with a UX/UI redesign of the sign-up flow to reduce drop-off.",
+        "stack": ".NET 6/8 · Razor Pages · SQL Server · xUnit · Azure DevOps"
+      },
+      "itserve": {
+        "role": "Full Stack .NET Developer",
+        "company": "IT Serve",
+        "kind": "External consultant, Tunisie Telecom",
+        "period": "January — July 2024",
+        "project": "Workflow Backbone — national internet subscription management platform",
+        "p1": "Identified and resolved performance bottlenecks through SQL profiling and execution plan analysis on a nationally deployed platform.",
+        "p2": "Integrated third-party web services (REST, SOAP) to enrich request qualification and acceptance features, and improved stored procedures on SQL Server and PostgreSQL.",
+        "stack": ".NET Standard · SOAP · SQL Server · PostgreSQL"
+      },
+      "simplydesk": {
+        "role": "Full Stack .NET Developer",
+        "company": "SimplyDesk",
+        "kind": "Tunis",
+        "period": "January 2023 — January 2024",
+        "project": "Multichannel ticketing software",
+        "p1": "Developed new features (IT asset management) and automated business workflows: prioritisation, SLA, notifications.",
+        "p2": "Improved performance via caching and SQL query optimisation, contributed to the module migration to .NET Core and optimised CI/CD pipelines on TeamCity.",
+        "p3": "Delivered in Agile Scrum, mentoring junior developers through code reviews and pair programming sessions.",
+        "stack": ".NET Framework 4.8 · React · TypeScript · TeamCity"
+      }
+    },
+    "highlight": "three years"
+  },
+  "work": {
+    "label": "07 / Work",
+    "title": "Four technical decisions",
+    "readMore": "Read the case study",
+    "items": {
+      "isolation": {
+        "title": "Multi-tenant isolation: isolating without slowing the API",
+        "excerpt": "How to guarantee no query can cross a tenant boundary, without adding a filter to every single call.",
+        "meta": "Multi-tenant · EF Core · JWT"
+      },
+      "concurrency": {
+        "title": "Optimistic concurrency: the conflict you never see",
+        "excerpt": "Two users, one record, no silent overwrite. xmin, 409 and real-time presence.",
+        "meta": "PostgreSQL · SignalR · Testcontainers"
+      },
+      "licensing": {
+        "title": "Getting off MediatR and AutoMapper, in production",
+        "excerpt": "MediatR and AutoMapper go dual-license. 100+ handlers to migrate without pausing delivery.",
+        "meta": "Compliance · CQRS · Mapperly"
+      },
+      "saas": {
+        "title": "Solo SaaS: from Payload CMS to a real client",
+        "excerpt": "Designed, built and deployed alone: a website-builder and business-management platform, live for a real client.",
+        "meta": "Next.js · Payload CMS · Neon"
+      },
+      "auth": {
+        "title": "The session you thought was closed",
+        "excerpt": "A replayed refresh token, a session still valid after a password change. Atomic rotation, reuse detection, cascading revocation.",
+        "meta": "ASP.NET Core Identity · JWT · Security"
+      }
+    },
+    "highlight": "decisions"
+  },
+  "caseStudies": {
+    "back": "Back",
+    "problemLabel": "The problem",
+    "approachLabel": "The approach",
+    "resultLabel": "The result",
+    "isolation": {
+      "problem": "Guarantee that no query can cross a tenant boundary — without that guarantee resting on every developer remembering to add a filter to every call.",
+      "approach": "The current tenant is resolved from a JWT claim at authentication, then fed into an EF Core Global Query Filter configured once at the DbContext level. Every LINQ query, even one written without thinking about tenancy, is automatically scoped to the active tenant. On top of that, entity-level RBAC distinguishes Admin, Manager and Collaborator for permissions that don't depend on the tenant.",
+      "result": "Isolation becomes a property of the framework, not a convention to remember. A new endpoint inherits the filter without writing anything tenant-specific — the most common multi-tenant bug, a forgotten filter on one isolated query, disappears structurally.",
+      "metrics": {
+        "m1": {
+          "value": "5",
+          "label": "aggregates covered"
+        },
+        "m2": {
+          "value": "3",
+          "label": "RBAC roles"
+        },
+        "m3": {
+          "value": "0",
+          "label": "manual filters per query"
+        }
+      },
+      "metaTitle": "Multi-tenant isolation with EF Core Global Query Filters",
+      "metaDescription": "Guaranteeing no query crosses a tenant boundary in .NET: EF Core Global Query Filters, per-tenant JWT claims and entity-level RBAC."
+    },
+    "concurrency": {
+      "problem": "On a time-tracking platform, several managers edit the same records at once — at month end, on the same teams. Entity Framework's default behaviour is last-write-wins: the second save overwrites the first with no warning, no trace, no error. Nobody notices until a customer reports missing hours, and by then there is no way to reconstruct what was lost.",
+      "approach": "PostgreSQL already maintains a system version counter on every row, xmin, incremented on each write. Rather than adding an application-level version column to maintain, I declared it as the EF Core concurrency token on the affected aggregates. The client reads xmin alongside the data and sends it back on save; if the value moved in the meantime, EF Core raises a DbUpdateConcurrencyException and the API layer translates it into HTTP 409, without ever writing. On top of that, real-time editing presence over SignalR shows a banner as soon as another user opens the same field — the collision is surfaced before it happens, not merely rejected afterwards.",
+      "result": "Silent overwrites are gone from the model: they are now structurally impossible on the covered aggregates. The behaviour is verified in CI by PostgreSQL integration tests running under Docker and Testcontainers, replaying two genuinely concurrent writes and asserting both the 409 and multi-tenant isolation — not mocks, a real database. The demonstration higher up this site reproduces the mechanism faithfully.",
+      "metrics": {
+        "m1": {
+          "value": "409",
+          "label": "instead of an overwrite"
+        },
+        "m2": {
+          "value": "1",
+          "label": "column added: none"
+        },
+        "m3": {
+          "value": "2",
+          "label": "concurrent writes tested in CI"
+        }
+      },
+      "metaTitle": "PostgreSQL optimistic concurrency with xmin and EF Core",
+      "metaDescription": "Using PostgreSQL's system xmin column as the EF Core concurrency token: no column added, conflicts as HTTP 409, verified with Testcontainers."
+    },
+    "licensing": {
+      "problem": "MediatR and AutoMapper announce a move to dual-licensing. Over 100 CQRS handlers and 9 mapping profiles depend on them, on a live platform, with no maintenance window available to rewrite everything at once.",
+      "approach": "The migration ran handler by handler behind the existing abstraction: a custom OSS dispatcher replaced MediatR without changing handler signatures, and Mapperly replaced AutoMapper — its mappers are generated at compile time instead of resolved by reflection at runtime.",
+      "result": "100+ handlers and 9 mapping profiles migrated without pausing delivery or introducing a functional regression, plus a measurable mapping speed-up: compile-time generation removes AutoMapper's reflection cost.",
+      "metrics": {
+        "m1": {
+          "value": "100+",
+          "label": "handlers migrated"
+        },
+        "m2": {
+          "value": "9",
+          "label": "mapping profiles"
+        },
+        "m3": {
+          "value": "0",
+          "label": "delivery pauses"
+        }
+      },
+      "metaTitle": "Replacing MediatR with a custom dispatcher",
+      "metaDescription": "MediatR and AutoMapper went dual-license. Migrating 100+ CQRS handlers to a custom OSS dispatcher and Mapperly without pausing delivery."
+    },
+    "saas": {
+      "problem": "Deliver a complete SaaS platform for a real client — an editable public site and a business back-office — alone, with no team, a minimal infrastructure budget and a fast path to production.",
+      "approach": "Decoupled architecture: a headless Payload CMS backend exposes REST APIs consumed by a Next.js frontend. Authentication runs on passwordless magic links instead of passwords, and PostgreSQL runs serverless on Neon to remove infrastructure management. The back-office covers an Elementor-like site builder, quotes and invoices, appointments, partner files, a client area, an agent area and internal messaging.",
+      "result": "The platform is live for a real client, Déménagement Tunisie, used daily by its team to edit the public site and run the business — not a showcase project, a tool that runs.",
+      "metrics": {
+        "m1": {
+          "value": "1",
+          "label": "client in production"
+        },
+        "m2": {
+          "value": "8",
+          "label": "business modules"
+        },
+        "m3": {
+          "value": "0",
+          "label": "passwords stored"
+        }
+      },
+      "metaTitle": "Magic link authentication with Next.js and Payload CMS",
+      "metaDescription": "Passwordless authentication for a SaaS in production: single-use tokens stored hashed and a headless Payload CMS backend."
+    },
+    "codeLabel": "Code excerpt",
+    "relatedLabel": "Read next",
+    "breadcrumbHome": "Home",
+    "breadcrumbWork": "Work",
+    "auth": {
+      "metaTitle": "Refresh token rotation and replay detection",
+      "metaDescription": "One-time rotation via compare-and-swap, reuse detection through the hash of the consumed token, and session revocation on password change.",
+      "problem": "A refresh token is long-lived by design: that is what spares the user from signing in every fifteen minutes. But the same longevity makes it the most attractive target in an application. If it leaks — a browser extension, a shared machine, a badly configured log — the attacker holds indefinitely renewable access. Worse: by default, changing a password invalidates nothing. A user who suspects compromise performs the one action they were taught, and the attacker's session carries on living.",
+      "approach": "The token becomes single-use: each refresh issues a new one and invalidates the old. Replacement happens through compare-and-swap rather than a plain UPDATE — if two concurrent requests present the same token, the database picks a winner and the loser is rejected, instead of both walking away with a valid session. Before rotating, the hash of the consumed token is kept: presenting that token again is no longer a possible mistake, it is the signature of a replay. The right answer then is not to refuse the request but to revoke the user's entire token family, since there is no way to know who — the legitimate holder or the attacker — still has what. In parallel, password changes and role edits reset the security stamp, invalidating tokens already in circulation.",
+      "result": "A stolen token is usable exactly once, and that single use triggers revocation of the legitimate session — the user is signed out, which is precisely the signal they need. Changing a password genuinely closes open sessions. And roles removed from a user take effect immediately, without waiting for the token to expire on its own.",
+      "metrics": {
+        "m1": {
+          "value": "1",
+          "label": "use per refresh token"
+        },
+        "m2": {
+          "value": "CAS",
+          "label": "atomic replacement"
+        },
+        "m3": {
+          "value": "0",
+          "label": "sessions surviving a replay"
+        }
+      }
+    }
+  },
+  "stack": {
+    "label": "08 / Stack",
+    "title": "Technical stack",
+    "hint": "Hover for usage context",
+    "groups": {
+      "core": "Core",
+      "architecture": "Architecture",
+      "data": "Data",
+      "security": "Security and APIs",
+      "quality": "Observability and testing",
+      "cloud": "Cloud and CI/CD",
+      "familiar": "Working knowledge"
+    },
+    "highlight": "stack"
+  },
+  "contact": {
+    "label": "11 / Contact",
+    "title": "Let's talk architecture",
+    "body": "Open to roles and engagements around .NET, multi-tenant SaaS and backend architecture.",
+    "email": "Send an email",
+    "linkedin": "LinkedIn",
+    "cv": "Download CV",
+    "education": "National Engineering Degree in Computer Science — ESPRIT, Tunis (2022)",
+    "languages": "Arabic (native) · French (professional) · English (B2)",
+    "educationLabel": "Education",
+    "languagesLabel": "Languages",
+    "locationLabel": "Based in",
+    "location": "Tunis, Tunisia — open to remote and relocation",
+    "phoneLabel": "Phone",
+    "phone": "+216 53 064 275 · +216 55 517 224"
+  },
+  "footer": {
+    "built": "Next.js · TypeScript · no UI dependency",
+    "rights": "All rights reserved"
+  },
+  "rbac": {
+    "label": "04 / Access control",
+    "title": "Who sees what",
+    "highlight": "sees what",
+    "intro": "Pick a role and a tenant. The same query returns different rows, and some links become unreachable. This is the access model shipped at TeamXtend, reproduced here on the client.",
+    "roleLabel": "Role",
+    "tenantLabel": "Signed-in tenant",
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "collaborator": "Collaborator"
+    },
+    "navLabel": "Navigation",
+    "dataLabel": "GET /api/projects",
+    "rowsVisible": "rows visible",
+    "blocked": "Out of scope",
+    "canWrite": "Write",
+    "yes": "Yes",
+    "no": "No",
+    "nav": {
+      "projects": "Projects",
+      "teams": "Teams",
+      "users": "Users",
+      "settings": "Settings"
+    },
+    "explain": "Two distinct mechanisms are at work. The Global Query Filter decides which rows exist for the query at all: a Manager on tenant North cannot read a row from tenant South, even by forging the identifier. Navigation flags decide what is clickable — they improve the experience but protect nothing, because the API re-checks on every call."
+  },
+  "notes": {
+    "indexLabel": "09 / Notes",
+    "indexTitle": "Technical notes — .NET, AutoCAD, upgrades",
+    "indexHighlight": "notes",
+    "indexIntro": "Field reports on the AutoCAD .NET API, protecting desktop software with hardware fingerprinting, and continuous .NET version upgrades.",
+    "readingTime": "min read",
+    "backToNotes": "All notes",
+    "relatedLabel": "Read next",
+    "relatedCaseLabel": "Related case study",
+    "breadcrumbNotes": "Notes",
+    "items": {
+      "autocad": {
+        "title": "Automating hydraulic structure design inside AutoCAD",
+        "excerpt": "A .NET 8 plugin generating culverts and technical sheets from an alignment and a surface, hydraulic calculations included.",
+        "metaTitle": "AutoCAD plugin in .NET 8 for civil engineering",
+        "metaDescription": "Building an AutoCAD plugin with the .NET API: reading an alignment and a surface, hydraulic calculations, 3D model and export to HY-8.",
+        "meta": "AutoCAD .NET API · .NET 8 · Civil engineering",
+        "p1": "Designing a culvert — the structure that carries water under a road — is repetitive work. The engineer reads an alignment and a surface from the model, computes the geometry, checks hydraulic behaviour, then transfers everything onto a drawing and a technical sheet. The same sequence, dozens of times per road project.",
+        "p2": "The plugin reads the alignment and surface straight from the drawing through the AutoCAD .NET API, derives the structure's geometry, runs the geometric and hydraulic calculations, then generates the 3D model and the matching technical sheet. What used to take a working session becomes a command.",
+        "p3": "The most instructive part of the project is not the code: it is the line between what a plugin should compute and what it should delegate. Hydraulic results are exported automatically to HY-8, the US FHWA's reference software, which acts as the verification authority. The plugin does not claim to replace a reference tool — it feeds it clean data and reads back its verdict.",
+        "p4": "Working with the AutoCAD .NET API imposes constraints web work never raises. The plugin runs inside AutoCAD's process, so an unhandled exception does not fail a request: it takes down the user's session, along with their unsaved work. Transactions against the drawing database must be opened and closed with the same discipline as a SQL transaction.",
+        "p5": "It is also a useful reminder for a web-oriented profile: the business does not always live in a REST API. Some industries have worked inside a desktop application for thirty years, and the value you add there is measured in engineer-hours freed, not milliseconds of latency.",
+        "stack": ".NET 8 · AutoCAD .NET API · C# · HY-8 (FHWA)"
+      },
+      "licensing": {
+        "title": "Protecting desktop software: hardware fingerprinting and heartbeat",
+        "excerpt": "How to tie a licence to a machine, verify it continuously, and cut access the moment it stops being valid.",
+        "metaTitle": "Desktop licensing in .NET: fingerprint, heartbeat",
+        "metaDescription": "Protecting desktop software: hardware identification, a REST verification API and a heartbeat that cuts access when the licence turns invalid.",
+        "meta": "Licensing · ASP.NET Core · Security",
+        "p1": "A business plugin sold to a few dozen engineering firms raises a problem web applications never face: it runs on the customer's machine, out of the server's reach. Nothing technically prevents copying it onto ten workstations.",
+        "p2": "The approach taken ties the licence to the machine rather than the user. On first launch, the plugin builds a fingerprint from hardware and system elements — MAC address, Windows information, installation coordinates — and sends it to a REST verification API. The server maps that fingerprint to a licence and returns a verdict.",
+        "p3": "A single check at startup is not enough: it lets a revoked licence keep working until the next restart, which can mean weeks. A heartbeat mechanism therefore calls the platform at regular intervals. If the licence has been revoked, has expired, or the fingerprint no longer matches, access is cut within the running session.",
+        "p4": "On the admin side, an ASP.NET Razor Pages interface creates, revokes and tracks licences. It is deliberately plain: the tool serves an internal team, not an online catalogue, and an over-designed interface would have cost time without returning any.",
+        "p5": "An honest caveat to close on: no client-side protection is unbreakable. A .NET plugin can be decompiled, and a hardware fingerprint can be forged by someone determined. The realistic goal is not to make copying impossible — it is to make it more expensive than buying, and to give the vendor a way to revoke a licence.",
+        "stack": ".NET 8 · ASP.NET Core Web API · Razor Pages · Dapper · SQL Server"
+      },
+      "dotnet-upgrade": {
+        "title": "Crossing five .NET versions without rewriting the application",
+        "excerpt": "From .NET 5 to .NET 10 on production projects: what an upgrade actually costs, and why waiting costs more.",
+        "metaTitle": "Migrating from .NET 5 to .NET 10 in production",
+        "metaDescription": "Five successive .NET upgrades in production: progressive migration over big bang, and the pitfalls of EF Core breaking changes.",
+        "meta": "Migration · .NET · Technical debt",
+        "p1": "Over three years I have shipped applications on .NET 5, 6, 8 and 10, and led several upgrades on projects already in production. The most consistent lesson is counter-intuitive: the migration is rarely the problem. The waiting is.",
+        "p2": "Moving a maintained application up one major version generally takes a few days. The same jump on an application left three versions behind becomes a project in its own right, because breaking changes accumulate and compound, and third-party libraries no longer follow the same trajectory.",
+        "p3": "The approach that worked best is progressive rather than head-on: raise the target framework first, let compiler warnings drive the work, and handle behavioural changes one at a time instead of rewriting. On a government permit management project, the move from .NET 6 to .NET 8 was done exactly that way across the whole solution, with a direct benefit in reduced build and package restore times.",
+        "p4": "Entity Framework Core deserves particular caution. It is the dependency where behavioural changes are quietest: a query that compiled and ran suddenly produces different SQL, or shifts from server-side to client-side evaluation. Without integration tests against a real database, that class of regression only shows up in production.",
+        "p5": "Which is, incidentally, the strongest argument for integration tests against a real database under Docker and Testcontainers: they do not only validate today's feature, they make the next upgrade survivable.",
+        "stack": ".NET 5 → 10 · EF Core · xUnit · Testcontainers · Docker"
+      }
+    }
+  },
+  "faq": {
+    "label": "10 / Questions",
+    "title": "Frequently asked",
+    "highlight": "asked",
+    "items": {
+      "isolation": {
+        "q": "How do you isolate customer data in a .NET SaaS application?",
+        "a": "By carrying isolation in the data access layer rather than in every query. With EF Core, a Global Query Filter applied to all relevant entities automatically appends the tenant condition to every LINQ query generated. The tenant comes from a validated JWT claim, never from the request body. A developer who forgets a WHERE clause then cannot expose another customer's data."
+      },
+      "xminVsRowversion": {
+        "q": "xmin or a version column: which to pick for optimistic concurrency?",
+        "a": "On PostgreSQL, xmin is preferable in most cases. It is a system column the database already maintains on every write: no column to add, no migration, no risk of forgetting to increment it. An application-level version column keeps its value if you need to stay portable across several database engines."
+      },
+      "leaveMediatr": {
+        "q": "Should you leave MediatR now that it is commercially licensed?",
+        "a": "It depends on actual usage. If you rely on pipelines, notifications and the library's full behaviour, paying for the licence is probably the sensible call. If you only ever call Send, as many teams do, the surface to replace fits in one interface and one dispatch class — a day's work against a recurring cost."
+      },
+      "availability": {
+        "q": "Is Fedi Soltani available for a role or an engagement?",
+        "a": "Yes, open to opportunities around .NET, multi-tenant SaaS and backend architecture, remote or with relocation. Based in Tunis. Reach out by email at soltanifedi68@gmail.com or via LinkedIn."
+      }
+    }
+  }
+}
