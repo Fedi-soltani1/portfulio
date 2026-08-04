@@ -61,7 +61,7 @@ export function Header() {
           href="/"
           className="mono"
           style={{ color: 'var(--ink)', flexShrink: 0 }}
-          aria-label="Soltani Fedi"
+          aria-label={t('logoLabel')}
         >
           SF
         </Link>

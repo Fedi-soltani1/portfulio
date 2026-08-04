@@ -15,7 +15,8 @@
     "skipToContent": "Skip to content",
     "rbac": "Access",
     "notes": "Notes",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "logoLabel": "SF — Soltani Fedi, back to home"
   },
   "hero": {
     "label": "01 / Software engineer",
