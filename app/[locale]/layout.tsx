@@ -74,6 +74,9 @@ export async function generateMetadata({
       follow: true,
       googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
     },
+    verification: {
+      google: 'HuEzZkEktD3rsj7ll4mVAZqE-LjIwpz0hi0HRMgxSrU',
+    },
   };
 }
 
