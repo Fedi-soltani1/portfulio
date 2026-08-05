@@ -116,7 +116,7 @@ export default async function LocaleLayout({
      * is required because the inline script mutates data-theme before React
      * hydrates — an intentional mismatch, not a bug to silence blindly.
      */
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
