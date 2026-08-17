@@ -32,6 +32,15 @@ export async function generateMetadata({
       },
     },
     openGraph: { title: t('indexTitle'), description: t('indexIntro'), url },
+    // Twitter does not fall back to openGraph here: the root layout defines
+    // its own twitter block, and a page that omits one inherits the parent's
+    // wholesale. Without these two lines the notes index was shared on X
+    // under the homepage title and description.
+    twitter: {
+      card: 'summary_large_image',
+      title: t('indexTitle'),
+      description: t('indexIntro'),
+    },
   };
 }
 
