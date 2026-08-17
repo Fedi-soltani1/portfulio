@@ -168,7 +168,7 @@ export function caseStudyForPillar(pillar: PillarKey): CaseStudy | undefined {
 export interface Note {
   slug: string;
   /** Message key under `notes.items.<key>`. */
-  key: 'autocad' | 'licensing' | 'dotnet-upgrade';
+  key: 'autocad' | 'licensing' | 'dotnet-upgrade' | 'observability';
   /** Number of body paragraphs in the messages file. */
   paragraphs: number;
   keywords: readonly string[];
@@ -228,15 +228,41 @@ export const NOTES: readonly Note[] = [
       'stratégie upgrade .NET long terme',
     ],
   },
+  {
+    slug: 'serilog-logs-multi-tenant',
+    key: 'observability',
+    paragraphs: 5,
+    dependencies: 'ASP.NET Core, Serilog, multi-tenant architecture',
+    relatedCase: 'multi-tenant-isolation',
+    keywords: [
+      'Serilog logs structurés ASP.NET Core',
+      'enrichir les logs avec le TenantId',
+      'CorrelationId X-Correlation-ID ASP.NET Core',
+      'observabilité application SaaS multi-tenant',
+      'Serilog enricher middleware .NET 10',
+    ],
+  },
 ] as const;
 
 export function findNote(slug: string): Note | undefined {
   return NOTES.find((n) => n.slug === slug);
 }
 
-/** The other notes, for the "read next" block. */
+/**
+ * Two other notes for the "read next" block.
+ *
+ * Capped at two, and rotating rather than "all the others", so the block
+ * stays the same size as the collection grows and every note both gives and
+ * receives exactly two links.
+ */
 export function relatedNotes(slug: string): Note[] {
-  return NOTES.filter((n) => n.slug !== slug);
+  const index = NOTES.findIndex((n) => n.slug === slug);
+  if (index === -1) return [];
+
+  return [
+    NOTES[(index + 1) % NOTES.length]!,
+    NOTES[(index + 2) % NOTES.length]!,
+  ];
 }
 
 /* ---------------------------------------------------------------- faq */

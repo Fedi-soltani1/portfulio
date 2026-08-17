@@ -401,9 +401,9 @@
   },
   "notes": {
     "indexLabel": "09 / Notes",
-    "indexTitle": "Technical notes — .NET, AutoCAD, upgrades",
+    "indexTitle": "Technical notes .NET — AutoCAD, upgrades, Serilog",
     "indexHighlight": "notes",
-    "indexIntro": "Field reports on the AutoCAD .NET API, protecting desktop software with hardware fingerprinting, and continuous .NET version upgrades.",
+    "indexIntro": "Field reports on the AutoCAD .NET API, protecting desktop software, .NET version upgrades and multi-tenant observability.",
     "readingTime": "min read",
     "backToNotes": "All notes",
     "relatedLabel": "Read next",
@@ -448,6 +448,19 @@
         "p4": "Entity Framework Core deserves particular caution. It is the dependency where behavioural changes are quietest: a query that compiled and ran suddenly produces different SQL, or shifts from server-side to client-side evaluation. Without integration tests against a real database, that class of regression only shows up in production.",
         "p5": "Which is, incidentally, the strongest argument for integration tests against a real database under Docker and Testcontainers: they do not only validate today's feature, they make the next upgrade survivable.",
         "stack": ".NET 5 → 10 · EF Core · xUnit · Testcontainers · Docker"
+      },
+      "observability": {
+        "title": "Knowing which customer triggered which error",
+        "excerpt": "Structured logs carrying the tenant, the user and a correlation id — without them a multi-tenant platform becomes impossible to debug.",
+        "metaTitle": "Serilog and multi-tenant logs in ASP.NET Core",
+        "metaDescription": "Structured JSON logging with Serilog: enrichment by TenantId, UserId and CorrelationId, and propagation of the X-Correlation-ID header.",
+        "meta": "Serilog · ASP.NET Core · Observability",
+        "p1": "On a single-customer application an error message is often enough: there is only one possible context. On a multi-tenant platform the same log line becomes useless. \"Failed to save timesheet\" says nothing about which customer is affected, which user, or whether the incident hits one person or an entire organisation. You cannot reproduce it, size it, or answer the customer who is calling.",
+        "p2": "The fix is not to write more detailed messages. It is to stop writing text at all. A structured log is an object: the message carries named fields, and every record is emitted as JSON with those fields as queryable properties. Asking for \"every error on tenant North in the last two hours\" becomes a query rather than a full-text search through a file.",
+        "p3": "Enrichment happens once, in the pipeline, never at the call site. A middleware pushes the TenantId and UserId from the validated JWT into the logging context as soon as the request is authenticated, and everything logged afterwards carries them automatically. It is the same principle as the Global Query Filter on the data side: a developer who forgets to attach context to a call does not thereby produce a blind log, because they never had to think about it.",
+        "p4": "On top of that sits a correlation id, read from the X-Correlation-ID header when the caller provides one, generated otherwise, and echoed back in the response. Without it, a request crossing the frontend, the API and an external service leaves three unrelated traces. With it, a single value reconstructs the whole path — and a customer reporting a problem can hand over that value instead of an approximate timestamp.",
+        "p5": "One caution, because it is easy to make things worse: enriched logs are also logs holding more personal data. TenantId and UserId are opaque identifiers, which is acceptable; a request body is not. Configuration is driven from appsettings rather than hardcoded, precisely so the level and the fields can be tuned per environment without a redeploy.",
+        "stack": ".NET 10 · Serilog · ASP.NET Core · structured JSON"
       }
     }
   },

@@ -401,9 +401,9 @@
   },
   "notes": {
     "indexLabel": "09 / Notes",
-    "indexTitle": "Notes techniques — .NET, AutoCAD, migrations",
+    "indexTitle": "Notes techniques .NET — AutoCAD, migrations, Serilog",
     "indexHighlight": "techniques",
-    "indexIntro": "Retours d'expérience sur l'API .NET d'AutoCAD, la protection d'un logiciel de bureau par empreinte matérielle et les montées de version .NET.",
+    "indexIntro": "Retours d'expérience sur l'API .NET d'AutoCAD, la protection d'un logiciel de bureau, les montées de version .NET et l'observabilité multi-tenant.",
     "readingTime": "min de lecture",
     "backToNotes": "Toutes les notes",
     "relatedLabel": "À lire ensuite",
@@ -448,6 +448,19 @@
         "p4": "Entity Framework Core mérite une vigilance particulière. C'est la dépendance où les changements de comportement sont les plus silencieux : une requête qui compilait et s'exécutait produit soudain un SQL différent, ou bascule d'une évaluation côté serveur à une évaluation côté client. Sans tests d'intégration sur une vraie base, ce type de régression ne se voit qu'en production.",
         "p5": "C'est d'ailleurs l'argument le plus solide en faveur des tests d'intégration avec une base réelle, sous Docker et Testcontainers : ils ne servent pas seulement à valider la fonctionnalité du jour, ils rendent la prochaine montée de version tenable.",
         "stack": ".NET 5 → 10 · EF Core · xUnit · Testcontainers · Docker"
+      },
+      "observability": {
+        "title": "Savoir quel client a déclenché quelle erreur",
+        "excerpt": "Des logs structurés qui portent le tenant, l'utilisateur et l'identifiant de corrélation — sans quoi une plateforme multi-tenant devient indéboguable.",
+        "metaTitle": "Serilog et logs multi-tenant en ASP.NET Core",
+        "metaDescription": "Logs structurés JSON avec Serilog : enrichissement par TenantId, UserId et CorrelationId, et propagation du header X-Correlation-ID.",
+        "meta": "Serilog · ASP.NET Core · Observabilité",
+        "p1": "Sur une application mono-client, un message d'erreur suffit souvent : il n'y a qu'un contexte possible. Sur une plateforme multi-tenant, la même ligne de log devient inexploitable. « Échec de sauvegarde de la fiche de temps » ne dit ni quel client est affecté, ni quel utilisateur, ni si l'incident touche une personne ou toute une organisation. On ne peut ni reproduire, ni mesurer l'ampleur, ni répondre au client qui appelle.",
+        "p2": "La correction ne consiste pas à écrire des messages plus détaillés. Elle consiste à arrêter d'écrire du texte. Un log structuré est un objet : le message porte des champs nommés, et chaque enregistrement sort en JSON avec ces champs comme propriétés interrogeables. Chercher « toutes les erreurs du tenant Nord des deux dernières heures » devient une requête, pas une recherche plein texte dans un fichier.",
+        "p3": "L'enrichissement se fait une seule fois, dans le pipeline, jamais à l'appel. Un middleware place le TenantId et l'UserId issus du JWT validé dans le contexte de log dès que la requête est authentifiée, et tout ce qui est journalisé ensuite les porte automatiquement. C'est le même principe que le Global Query Filter côté données : un développeur qui oublie d'ajouter le contexte à son appel ne produit pas pour autant un log aveugle, parce qu'il n'a jamais eu à y penser.",
+        "p4": "S'y ajoute un identifiant de corrélation, lu depuis le header X-Correlation-ID s'il est fourni par l'appelant, généré sinon, et renvoyé dans la réponse. Sans lui, une requête qui traverse le frontend, l'API et un service externe laisse trois traces sans lien entre elles. Avec lui, une seule valeur reconstitue le parcours complet — et le client qui signale un problème peut fournir cette valeur plutôt qu'une heure approximative.",
+        "p5": "Un point de vigilance, parce qu'il est facile de faire pire que bien : des logs enrichis sont aussi des logs qui contiennent plus de données personnelles. Le TenantId et l'UserId sont des identifiants opaques, c'est acceptable ; le corps d'une requête ne l'est pas. La configuration est pilotée par appsettings plutôt que codée en dur, précisément pour pouvoir ajuster le niveau et les champs par environnement sans redéployer.",
+        "stack": ".NET 10 · Serilog · ASP.NET Core · JSON structuré"
       }
     }
   },
