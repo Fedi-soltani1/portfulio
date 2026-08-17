@@ -12,3 +12,6 @@ next-env.d.ts
 
 # Réglages locaux de l'éditeur
 .claude/
+
+.vercel
+.env*
