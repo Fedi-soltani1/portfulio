@@ -63,14 +63,14 @@ Available in French (${SITE_URL}/fr) and English (${SITE_URL}/en).
 ## Case studies
 
 ${CASE_STUDIES.map(
-  (c) => `- [${c.slug}](${SITE_URL}/en/work/${c.slug}): ${c.keywords[0]}.
+  (c) => `- [${c.slug}](${SITE_URL}/en/work/${c.slug}): ${c.keywords.en[0]}.
   Prerequisites: ${c.dependencies}.`,
 ).join('\n')}
 
 ## Technical notes
 
 ${NOTES.map(
-  (n) => `- [${n.slug}](${SITE_URL}/en/notes/${n.slug}): ${n.keywords[0]}.
+  (n) => `- [${n.slug}](${SITE_URL}/en/notes/${n.slug}): ${n.keywords.en[0]}.
   Prerequisites: ${n.dependencies}.`,
 ).join('\n')}
 

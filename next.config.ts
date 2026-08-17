@@ -24,7 +24,9 @@ const nextConfig: NextConfig = {
    */
   async redirects() {
     return [
-      { source: '/work', destination: '/fr#work', permanent: true },
+      // No unprefixed /work rule: the i18n proxy sends it to the visitor's
+      // language first, and the two rules below then land them on the right
+      // section. Hardcoding a locale here would have overridden detection.
       { source: '/fr/work', destination: '/fr#work', permanent: true },
       { source: '/en/work', destination: '/en#work', permanent: true },
     ];

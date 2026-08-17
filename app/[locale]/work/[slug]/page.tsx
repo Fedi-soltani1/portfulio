@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { CASE_METRICS, CASE_STUDIES } from '@/lib/content';
+import { CASE_METRICS, CASE_STUDIES, keywordsFor } from '@/lib/content';
 import { SITE_URL } from '@/lib/site';
 import { ConflictDemo } from '@/components/concurrency/ConflictDemo';
 import { CodeBlock } from '@/components/ui/CodeBlock';
@@ -38,7 +38,7 @@ export async function generateMetadata({
   return {
     title: tCase(`${caseStudy.key}.metaTitle`),
     description: tCase(`${caseStudy.key}.metaDescription`),
-    keywords: [...caseStudy.keywords],
+    keywords: keywordsFor(caseStudy.keywords, locale),
     alternates: {
       canonical: url,
       languages: {
@@ -90,7 +90,7 @@ export default async function CaseStudyPage({
         path={`work/${slug}`}
         headline={tCase(`${key}.metaTitle`)}
         description={tCase(`${key}.metaDescription`)}
-        keywords={[...caseStudy.keywords]}
+        keywords={keywordsFor(caseStudy.keywords, locale)}
         dependencies={caseStudy.dependencies}
         personId={`${SITE_URL}/#person`}
       />

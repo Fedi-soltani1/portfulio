@@ -3,7 +3,13 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ArrowUpRight } from 'lucide-react';
 import { Link } from '@/lib/i18n/navigation';
-import { NOTES, CASE_STUDIES, findNote, relatedNotes } from '@/lib/content';
+import {
+  NOTES,
+  CASE_STUDIES,
+  findNote,
+  relatedNotes,
+  keywordsFor,
+} from '@/lib/content';
 import { SITE_URL } from '@/lib/site';
 import { routing } from '@/lib/i18n/routing';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
@@ -30,7 +36,7 @@ export async function generateMetadata({
   return {
     title: t(`items.${note.key}.metaTitle`),
     description: t(`items.${note.key}.metaDescription`),
-    keywords: [...note.keywords],
+    keywords: keywordsFor(note.keywords, locale),
     alternates: {
       canonical: url,
       languages: {
@@ -85,7 +91,7 @@ export default async function NotePage({
         path={`notes/${slug}`}
         headline={t(`items.${key}.metaTitle`)}
         description={t(`items.${key}.metaDescription`)}
-        keywords={[...note.keywords]}
+        keywords={keywordsFor(note.keywords, locale)}
         dependencies={note.dependencies}
         personId={`${SITE_URL}/#person`}
       />

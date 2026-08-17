@@ -61,14 +61,33 @@ export const EXPERIENCE_POINTS: Record<ExperienceKey, number> = {
   simplydesk: 3,
 };
 
+/** Long-tail queries, one list per language. */
+export interface LocalisedKeywords {
+  readonly fr: readonly string[];
+  readonly en: readonly string[];
+}
+
+/** The list for a locale, falling back to English for anything unexpected. */
+export function keywordsFor(
+  keywords: LocalisedKeywords,
+  locale: string,
+): string[] {
+  return [...(locale === 'fr' ? keywords.fr : keywords.en)];
+}
+
 export interface CaseStudy {
   key: 'isolation' | 'concurrency' | 'auth' | 'licensing' | 'saas';
   slug: string;
   /**
-   * Long-tail queries this study genuinely answers. Used as schema
-   * keywords and to pick related studies — never stuffed into the copy.
+   * Long-tail queries this study genuinely answers, per language. Used as
+   * schema keywords — never stuffed into the copy.
+   *
+   * Split by locale because a single shared list meant the English pages
+   * declared French queries in their TechArticle schema. Google and the
+   * answer engines read that field, and a page describing itself in a
+   * language it is not written in sends a confused topical signal.
    */
-  keywords: readonly string[];
+  keywords: LocalisedKeywords;
   /** Prior knowledge a reader needs; a real TechArticle field. */
   dependencies: string;
   /** Which pillar in the Expertise section links here. */
@@ -84,64 +103,108 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     slug: 'multi-tenant-isolation',
     pillar: 'isolation',
     dependencies: 'ASP.NET Core, Entity Framework Core, PostgreSQL',
-    keywords: [
-      'EF Core global query filter multi-tenant',
-      'isolation des données multi-tenant .NET',
-      'per-tenant JWT claims ASP.NET Core',
-      'RBAC entity-level EF Core',
-      'multi-tenant SaaS architecture .NET',
-    ],
+    keywords: {
+      fr: [
+        'isolation des données multi-tenant .NET',
+        'EF Core global query filter multi-tenant',
+        'claims JWT par tenant ASP.NET Core',
+        'RBAC entity-level EF Core',
+        'architecture SaaS multi-tenant .NET',
+      ],
+      en: [
+        'EF Core global query filter multi-tenant',
+        'multi-tenant data isolation .NET',
+        'per-tenant JWT claims ASP.NET Core',
+        'entity-level RBAC EF Core',
+        'multi-tenant SaaS architecture .NET',
+      ],
+    },
   },
   {
     key: 'concurrency',
     slug: 'optimistic-concurrency',
     pillar: 'concurrency',
     dependencies: 'Entity Framework Core, PostgreSQL, SignalR',
-    keywords: [
-      'PostgreSQL xmin concurrency token EF Core',
-      'optimistic concurrency EF Core PostgreSQL',
-      'DbUpdateConcurrencyException HTTP 409',
-      'editing presence SignalR temps réel',
-      'Testcontainers PostgreSQL tests intégration .NET',
-    ],
+    keywords: {
+      fr: [
+        'concurrence optimiste EF Core PostgreSQL',
+        'xmin comme jeton de concurrence EF Core',
+        'DbUpdateConcurrencyException renvoyer un 409',
+        'présence d’édition temps réel SignalR',
+        'tests d’intégration PostgreSQL Testcontainers .NET',
+      ],
+      en: [
+        'PostgreSQL xmin concurrency token EF Core',
+        'optimistic concurrency EF Core PostgreSQL',
+        'DbUpdateConcurrencyException HTTP 409',
+        'real-time editing presence SignalR',
+        'Testcontainers PostgreSQL integration tests .NET',
+      ],
+    },
   },
   {
     key: 'auth',
     slug: 'refresh-token-rotation',
     pillar: 'concurrency',
     dependencies: 'ASP.NET Core Identity, JWT, relational database',
-    keywords: [
-      'rotation refresh token détection de réutilisation',
-      'refresh token rotation reuse detection .NET',
-      'compare-and-swap refresh token base de données',
-      'révoquer toutes les sessions ASP.NET Core Identity',
-      'JWT security stamp invalidation rôles',
-    ],
+    keywords: {
+      fr: [
+        'rotation des refresh tokens détection de rejeu',
+        'refresh token à usage unique ASP.NET Core',
+        'compare-and-swap refresh token en base',
+        'révoquer toutes les sessions ASP.NET Core Identity',
+        'invalider un JWT au changement de rôle',
+      ],
+      en: [
+        'refresh token rotation reuse detection .NET',
+        'single-use refresh token ASP.NET Core',
+        'compare-and-swap refresh token database',
+        'revoke all sessions ASP.NET Core Identity',
+        'JWT security stamp role invalidation',
+      ],
+    },
   },
   {
     key: 'licensing',
     slug: 'mediatr-migration',
     pillar: 'architecture',
     dependencies: 'ASP.NET Core, CQRS, dependency injection',
-    keywords: [
-      'MediatR licence payante alternative',
-      'remplacer MediatR dispatcher custom',
-      'migration AutoMapper vers Mapperly',
-      'CQRS sans MediatR .NET',
-      'MediatR dual license 2025 migration',
-    ],
+    keywords: {
+      fr: [
+        'alternative à MediatR devenu payant',
+        'remplacer MediatR par un dispatcher custom',
+        'migrer d’AutoMapper vers Mapperly',
+        'CQRS sans MediatR en .NET',
+        'MediatR dual license 2025 que faire',
+      ],
+      en: [
+        'MediatR commercial licence alternative',
+        'replace MediatR with a custom dispatcher',
+        'migrate from AutoMapper to Mapperly',
+        'CQRS without MediatR .NET',
+        'MediatR dual license 2025 migration',
+      ],
+    },
   },
   {
     key: 'saas',
     slug: 'saas-platform',
     pillar: 'delivery',
     dependencies: 'Next.js, Payload CMS, PostgreSQL',
-    keywords: [
-      'authentification magic link Next.js',
-      'Payload CMS headless Next.js SaaS',
-      'passwordless authentication implementation',
-      'Neon serverless PostgreSQL Next.js',
-    ],
+    keywords: {
+      fr: [
+        'authentification par magic link Next.js',
+        'Payload CMS headless avec Next.js',
+        'authentification sans mot de passe implémentation',
+        'Neon PostgreSQL serverless avec Next.js',
+      ],
+      en: [
+        'magic link authentication Next.js',
+        'Payload CMS headless Next.js SaaS',
+        'passwordless authentication implementation',
+        'Neon serverless PostgreSQL Next.js',
+      ],
+    },
   },
 ] as const;
 
@@ -171,7 +234,7 @@ export interface Note {
   key: 'autocad' | 'licensing' | 'dotnet-upgrade' | 'observability';
   /** Number of body paragraphs in the messages file. */
   paragraphs: number;
-  keywords: readonly string[];
+  keywords: LocalisedKeywords;
   dependencies: string;
   /** Case study this note should link to, if any. */
   relatedCase?: CaseStudy['slug'];
@@ -194,13 +257,22 @@ export const NOTES: readonly Note[] = [
     paragraphs: 5,
     dependencies: '.NET 8, AutoCAD .NET API, civil engineering basics',
     relatedCase: 'saas-platform',
-    keywords: [
-      'AutoCAD .NET API plugin C#',
-      'automatiser création dalot AutoCAD',
-      'plugin AutoCAD génie civil .NET 8',
-      'alignement et surface AutoCAD API',
-      'export HY-8 FHWA automatisé',
-    ],
+    keywords: {
+      fr: [
+        'plugin AutoCAD en C# avec l’API .NET',
+        'automatiser la création d’un dalot AutoCAD',
+        'plugin AutoCAD génie civil .NET 8',
+        'lire un alignement et une surface AutoCAD API',
+        'export automatisé vers HY-8 FHWA',
+      ],
+      en: [
+        'AutoCAD .NET API plugin C#',
+        'automate culvert creation AutoCAD',
+        'AutoCAD civil engineering plugin .NET 8',
+        'read alignment and surface AutoCAD API',
+        'automated HY-8 FHWA export',
+      ],
+    },
   },
   {
     slug: 'licensing-desktop-dotnet',
@@ -208,12 +280,20 @@ export const NOTES: readonly Note[] = [
     paragraphs: 5,
     dependencies: 'ASP.NET Core, REST APIs, desktop deployment',
     relatedCase: 'multi-tenant-isolation',
-    keywords: [
-      'licence logicielle desktop .NET',
-      'hardware fingerprint identification machine C#',
-      'heartbeat vérification licence API REST',
-      'protéger un plugin AutoCAD contre la copie',
-    ],
+    keywords: {
+      fr: [
+        'licence logicielle pour application desktop .NET',
+        'empreinte matérielle identification machine C#',
+        'heartbeat de vérification de licence API REST',
+        'protéger un plugin AutoCAD contre la copie',
+      ],
+      en: [
+        'desktop software licensing .NET',
+        'hardware fingerprint machine identification C#',
+        'licence heartbeat verification REST API',
+        'protect an AutoCAD plugin from copying',
+      ],
+    },
   },
   {
     slug: 'migration-dotnet-5-vers-10',
@@ -221,12 +301,20 @@ export const NOTES: readonly Note[] = [
     paragraphs: 5,
     dependencies: '.NET, Entity Framework Core, CI/CD',
     relatedCase: 'mediatr-migration',
-    keywords: [
-      'migrer .NET 6 vers .NET 8 en production',
-      'montée de version .NET sans réécriture',
-      'breaking changes EF Core migration',
-      'stratégie upgrade .NET long terme',
-    ],
+    keywords: {
+      fr: [
+        'migrer de .NET 6 vers .NET 8 en production',
+        'montée de version .NET sans réécriture',
+        'breaking changes EF Core lors d’une migration',
+        'stratégie de mise à niveau .NET sur le long terme',
+      ],
+      en: [
+        'migrate .NET 6 to .NET 8 in production',
+        '.NET version upgrade without a rewrite',
+        'EF Core breaking changes migration',
+        'long-term .NET upgrade strategy',
+      ],
+    },
   },
   {
     slug: 'serilog-logs-multi-tenant',
@@ -234,13 +322,22 @@ export const NOTES: readonly Note[] = [
     paragraphs: 5,
     dependencies: 'ASP.NET Core, Serilog, multi-tenant architecture',
     relatedCase: 'multi-tenant-isolation',
-    keywords: [
-      'Serilog logs structurés ASP.NET Core',
-      'enrichir les logs avec le TenantId',
-      'CorrelationId X-Correlation-ID ASP.NET Core',
-      'observabilité application SaaS multi-tenant',
-      'Serilog enricher middleware .NET 10',
-    ],
+    keywords: {
+      fr: [
+        'Serilog logs structurés en ASP.NET Core',
+        'enrichir les logs avec le TenantId',
+        'CorrelationId et header X-Correlation-ID ASP.NET Core',
+        'observabilité d’une application SaaS multi-tenant',
+        'Serilog enricher middleware .NET 10',
+      ],
+      en: [
+        'Serilog structured logging ASP.NET Core',
+        'enrich logs with TenantId multi-tenant',
+        'CorrelationId X-Correlation-ID ASP.NET Core',
+        'multi-tenant SaaS application observability',
+        'Serilog enricher middleware .NET 10',
+      ],
+    },
   },
 ] as const;
 
