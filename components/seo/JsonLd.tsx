@@ -121,7 +121,7 @@ export function BreadcrumbJsonLd({
 export function TechArticleJsonLd({
   siteUrl,
   locale,
-  slug,
+  path,
   headline,
   description,
   keywords,
@@ -130,14 +130,23 @@ export function TechArticleJsonLd({
 }: {
   siteUrl: string;
   locale: string;
-  slug: string;
+  /**
+   * Path after the locale segment, without a leading slash — for example
+   * `work/optimistic-concurrency` or `notes/autocad-dotnet-plugin`.
+   *
+   * This used to be a bare slug with `work/` hardcoded here, which silently
+   * produced `/en/work/notes/<slug>` on the notes pages: a URL that does not
+   * exist, declared to Google as the article's own address. Taking the full
+   * path removes the possibility of that mismatch.
+   */
+  path: string;
   headline: string;
   description: string;
   keywords: string[];
   dependencies: string;
   personId: string;
 }) {
-  const url = `${siteUrl}/${locale}/work/${slug}`;
+  const url = `${siteUrl}/${locale}/${path}`;
 
   return (
     <Ld

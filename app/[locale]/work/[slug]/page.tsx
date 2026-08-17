@@ -87,7 +87,7 @@ export default async function CaseStudyPage({
       <TechArticleJsonLd
         siteUrl={SITE_URL}
         locale={locale}
-        slug={slug}
+        path={`work/${slug}`}
         headline={tCase(`${key}.metaTitle`)}
         description={tCase(`${key}.metaDescription`)}
         keywords={[...caseStudy.keywords]}

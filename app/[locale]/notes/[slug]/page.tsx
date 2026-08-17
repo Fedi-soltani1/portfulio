@@ -82,7 +82,7 @@ export default async function NotePage({
       <TechArticleJsonLd
         siteUrl={SITE_URL}
         locale={locale}
-        slug={`notes/${slug}`}
+        path={`notes/${slug}`}
         headline={t(`items.${key}.metaTitle`)}
         description={t(`items.${key}.metaDescription`)}
         keywords={[...note.keywords]}
