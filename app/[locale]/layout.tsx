@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { preload } from 'react-dom';
 import { notFound } from 'next/navigation';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -15,6 +16,7 @@ import { Footer } from '@/components/layout/Footer';
 import { SmoothScroll } from '@/components/motion/SmoothScroll';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
 import { Cursor } from '@/components/ui/Cursor';
+import interTightLatin from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2';
 
 // Fonts are self-hosted via @fontsource-variable and imported in globals.css.
 
@@ -94,6 +96,27 @@ export default async function LocaleLayout({
   }
 
   setRequestLocale(locale);
+
+  /**
+   * The largest element on every page is the display heading, set in Inter
+   * Tight. Imported through CSS, that file is only discovered once the
+   * stylesheet has been downloaded and parsed, so the heading paints in a
+   * fallback face and then reflows. Preloading starts the request in the same
+   * round trip as the CSS — the cheapest gain available on Largest
+   * Contentful Paint here.
+   *
+   * Only the latin subset: it covers French and English, accents and the œ
+   * ligature included. The cyrillic, greek and vietnamese subsets stay lazy,
+   * fetched by the browser only if a page ever needs them.
+   *
+   * ReactDOM.preload rather than a <link> in <head>: React hoists preload
+   * links and emits its own alongside, which produced the tag twice.
+   */
+  preload(interTightLatin, {
+    as: 'font',
+    type: 'font/woff2',
+    crossOrigin: 'anonymous',
+  });
 
   const t = await getTranslations('nav');
   const tHero = await getTranslations('hero');
