@@ -378,6 +378,19 @@ export const FAQ_KEYS = [
 
 export type FaqKey = (typeof FAQ_KEYS)[number];
 
+/**
+ * The case study that answers each question in full depth. Three of the
+ * four questions restate something a case study already covers — leaving
+ * that connection implicit meant a reader who wanted the full mechanism
+ * had to go find it themselves. `availability` has no matching case study
+ * on purpose: it is about the person, not the architecture.
+ */
+export const FAQ_RELATED_CASE: Partial<Record<FaqKey, CaseStudy['slug']>> = {
+  isolation: 'multi-tenant-isolation',
+  xminVsRowversion: 'optimistic-concurrency',
+  leaveMediatr: 'mediatr-migration',
+};
+
 /* ---------------------------------------------------------------- stack */
 
 export interface TechItem {
