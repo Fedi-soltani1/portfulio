@@ -12,7 +12,7 @@ export const CONTACT = {
   /** Both reachable; the first is the one printed on the CVs. */
   phones: ['+21653064275', '+21655517224'],
   location: 'Laouina, Tunis',
-  linkedin: 'https://linkedin.com/in/fedi-soltani1',
+  linkedin: 'https://www.linkedin.com/in/fedi-soltani1/',
   cv: { fr: '/cv/CV_FEDI_SOLTANI_FR.pdf', en: '/cv/CV_FEDI_SOLTANI_EN.pdf' },
 } as const;
 
