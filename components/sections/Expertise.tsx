@@ -7,6 +7,7 @@ import { SectionHeader } from '@/components/layout/SectionHeader';
 
 export function Expertise() {
   const t = useTranslations('expertise');
+  const tWork = useTranslations('work');
 
   return (
     <section id="expertise" className="sec sec--raised">
@@ -78,6 +79,7 @@ export function Expertise() {
                   <Link
                     href={`/work/${study.slug}`}
                     className="pillar-link mono"
+                    aria-label={`${t('readCase')}: ${tWork(`items.${study.key}.title`)}`}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
